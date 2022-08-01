@@ -37,13 +37,3 @@ Wallet.propTypes = {
 };
 
 export default connect(mapStateToProps, null)(Wallet);
-
-/*
-ESTADO GLOBAL
-
-{
-  user: {
-    email: '',
-  }
-}
-*/

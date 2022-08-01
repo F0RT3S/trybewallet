@@ -1,23 +1,67 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchCurrency } from '../redux/actions';
+import { fetchCurrency, saveValueExpense } from '../redux/actions';
 
 class WalletForm extends Component {
+  constructor() {
+    super();
+    this.state = {
+      id: 0,
+      valueExpense: '',
+      description: '',
+      currencies: '',
+      method: '',
+      category: '',
+      allObjExpense: {},
+    };
+  }
+
   componentDidMount() {
     const { fetchCurrencySuccess } = this.props;
     console.log(fetchCurrencySuccess());
   }
 
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    }, this.allObj);
+  }
+
+  // Função para adicionar todos meus itens do state dentro do objeto que também está no state e que vou enviar para minha action
+  allObj = () => {
+    const { valueExpense,
+      description,
+      currencies,
+      method,
+      category,
+    } = this.state;
+
+    const obj = { valueExpense, description, currencies, method, category };
+    this.setState({ allObjExpense: obj });
+    // console.log(allObjExpense); // Por esse log vi que tava chegando informação com lag, por isso na linha 28 chamo a função
+  }
+
+  handleClick = () => {
+    const { valueExpenseProps } = this.props;
+    const { allObjExpense, id } = this.state;
+
+    valueExpenseProps(allObjExpense);
+  }
+
   render() {
     const { currency } = this.props;
+    const { valueExpense, description, currencies, method, category } = this.state;
     return (
       <form>
-        <label htmlFor="expanseAmount">
+        <label htmlFor="value-expense">
           <input
             data-testid="value-input"
             type="text"
-            name="expanseAmount"
+            name="valueExpense"
+            value={ valueExpense }
+            onChange={ this.handleChange }
             placeholder="Valor da Despesa"
           />
         </label>
@@ -27,17 +71,25 @@ class WalletForm extends Component {
             data-testid="description-input"
             type="text"
             name="description"
+            value={ description }
             placeholder="Descrição da despesa"
+            onChange={ this.handleChange }
           />
         </label>
 
         <label htmlFor="currency">
-          <select data-testid="currency-input">
+          <select
+            data-testid="currency-input"
+            name="currencies"
+            value={ currencies }
+            onChange={ this.handleChange }
+          >
             {
               currency.map((coins, index) => (
                 <option
                   value={ coins }
                   key={ index }
+                  onChange={ this.handleChange }
                 >
                   { coins }
                 </option>
@@ -47,22 +99,39 @@ class WalletForm extends Component {
         </label>
 
         <label htmlFor="currency-method">
-          <select data-testid="method-input">
-            <option value="dinheiro">Dinheiro</option>
-            <option value="cartaoCredito">Cartão de crédito</option>
-            <option value="cartaoDebito">Cartão de débito</option>
+          <select
+            data-testid="method-input"
+            name="method"
+            value={ method }
+            onChange={ this.handleChange }
+          >
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartao de crédito">Cartão de crédito</option>
+            <option value="Cartao de débito">Cartão de débito</option>
           </select>
         </label>
 
         <label htmlFor="category-expense">
-          <select data-testid="tag-input">
-            <option value="alimentacao">Alimentação</option>
-            <option value="lazer">Lazer</option>
-            <option value="trabalho">Trabalho</option>
-            <option value="transporte">Transporte</option>
-            <option value="saude">Saúde</option>
+          <select
+            data-testid="tag-input"
+            name="category"
+            value={ category }
+            onChange={ this.handleChange }
+          >
+            <option value="Alimentação">Alimentação</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Trabalho">Trabalho</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Saúde">Saúde</option>
           </select>
         </label>
+
+        <button
+          type="button"
+          onClick={ this.handleClick }
+        >
+          Adicionar despesa
+        </button>
       </form>
     );
   }
@@ -70,6 +139,7 @@ class WalletForm extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchCurrencySuccess: () => dispatch(fetchCurrency()),
+  valueExpenseProps: (value) => dispatch(saveValueExpense(value)),
 });
 
 const mapStateToProps = (globalState) => ({
