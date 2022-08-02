@@ -7,12 +7,12 @@ class WalletForm extends Component {
   constructor() {
     super();
     this.state = {
-      id: -1,
-      valueExpense: '',
+      id: 0,
+      value: '',
       description: '',
-      currencies: 'USD',
+      currency: 'USD',
       method: 'Dinheiro',
-      category: 'Alimentação',
+      tag: 'Alimentação',
       allObjExpense: {},
     };
   }
@@ -29,41 +29,44 @@ class WalletForm extends Component {
     }, this.allObj);
   }
 
-  // Função para adicionar todos meus itens do state dentro do objeto que também está no state e que vou enviar para minha action
-  allObj = () => {
-    const {
-      valueExpense,
-      description,
-      currencies,
-      method,
-      category,
-    } = this.state;
-
-    const obj = { valueExpense, description, currencies, method, category };
-    this.setState({ allObjExpense: obj });
-    // console.log(allObjExpense); // Por esse log vi que tava chegando informação com lag, por isso na linha 28 chamo a função
-  }
-
   handleClick = () => {
     const { fetchAllCurrencySucess } = this.props;
     const { allObjExpense } = this.state;
     fetchAllCurrencySucess(allObjExpense);
-    // this.setState((prevState) => ({
-    //   id: prevState.id + 1,
-    // }));
+    this.setState((prevState) => ({
+      id: prevState.id + 1,
+      value: '',
+      description: '',
+    }), this.allObj);
+  }
+
+  // Função para adicionar todos meus itens do state dentro do objeto que também está no state e que vou enviar para minha action
+  allObj = () => {
+    const {
+      id,
+      value,
+      description,
+      currency,
+      method,
+      tag,
+    } = this.state;
+
+    const obj = { value, description, currency, method, tag, id };
+    this.setState({ allObjExpense: obj });
+    // console.log(allObjExpense); // Por esse log vi que tava chegando informação com lag, por isso na linha 28 chamo a função
   }
 
   render() {
-    const { currency } = this.props;
-    const { valueExpense, description, currencies, method, category } = this.state;
+    const { currencies } = this.props;
+    const { value, description, currency, method, tag } = this.state;
     return (
       <form>
         <label htmlFor="value-expense">
           <input
             data-testid="value-input"
             type="text"
-            name="valueExpense"
-            value={ valueExpense }
+            name="value"
+            value={ value }
             onChange={ this.handleChange }
             placeholder="Valor da Despesa"
           />
@@ -83,12 +86,12 @@ class WalletForm extends Component {
         <label htmlFor="currency">
           <select
             data-testid="currency-input"
-            name="currencies"
-            value={ currencies }
+            name="currency"
+            value={ currency }
             onChange={ this.handleChange }
           >
             {
-              currency.map((coins, index) => (
+              currencies.map((coins, index) => (
                 <option
                   value={ coins }
                   key={ index }
@@ -109,16 +112,16 @@ class WalletForm extends Component {
             onChange={ this.handleChange }
           >
             <option value="Dinheiro">Dinheiro</option>
-            <option value="Cartao de crédito">Cartão de crédito</option>
-            <option value="Cartao de débito">Cartão de débito</option>
+            <option value="Cartão de crédito">Cartão de crédito</option>
+            <option value="Cartão de débito">Cartão de débito</option>
           </select>
         </label>
 
         <label htmlFor="category-expense">
           <select
             data-testid="tag-input"
-            name="category"
-            value={ category }
+            name="tag"
+            value={ tag }
             onChange={ this.handleChange }
           >
             <option value="Alimentação">Alimentação</option>
@@ -147,12 +150,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (globalState) => ({
-  currency: globalState.wallet.currencies,
+  currencies: globalState.wallet.currencies,
 });
 
 WalletForm.propTypes = {
   fetchCurrencySuccess: PropTypes.arrayOf(PropTypes.string).isRequired,
-  currency: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fetchAllCurrencySucess: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);

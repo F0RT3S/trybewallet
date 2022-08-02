@@ -10,10 +10,10 @@ export const currenciesList = (coins) => ({
 });
 
 export const saveValueExpense = ({
-  valueExpense, description, currencies, method, category,
+  value, description, currency, method, tag, id,
 }, exchangeRates) => ({
   type: 'UPDATE_EXPENSE',
-  payload: { valueExpense, description, currencies, method, category, exchangeRates },
+  payload: { id, value, description, currency, method, tag, exchangeRates },
 });
 
 export const fetchAllCurrency = (result) => async (dispatch) => {
