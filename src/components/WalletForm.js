@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchCurrency, saveValueExpense } from '../redux/actions';
+import { fetchAllCurrency, fetchCurrency, saveValueExpense } from '../redux/actions';
 
 class WalletForm extends Component {
   constructor() {
     super();
     this.state = {
-      id: 0,
+      id: -1,
       valueExpense: '',
       description: '',
-      currencies: '',
-      method: '',
-      category: '',
+      currencies: 'USD',
+      method: 'Dinheiro',
+      category: 'Alimentação',
       allObjExpense: {},
     };
   }
 
   componentDidMount() {
     const { fetchCurrencySuccess } = this.props;
-    console.log(fetchCurrencySuccess());
+    fetchCurrencySuccess();
   }
 
   handleChange = ({ target }) => {
@@ -31,7 +31,8 @@ class WalletForm extends Component {
 
   // Função para adicionar todos meus itens do state dentro do objeto que também está no state e que vou enviar para minha action
   allObj = () => {
-    const { valueExpense,
+    const {
+      valueExpense,
       description,
       currencies,
       method,
@@ -44,10 +45,12 @@ class WalletForm extends Component {
   }
 
   handleClick = () => {
-    const { valueExpenseProps } = this.props;
-    const { allObjExpense, id } = this.state;
-
-    valueExpenseProps(allObjExpense);
+    const { fetchAllCurrencySucess } = this.props;
+    const { allObjExpense } = this.state;
+    fetchAllCurrencySucess(allObjExpense);
+    // this.setState((prevState) => ({
+    //   id: prevState.id + 1,
+    // }));
   }
 
   render() {
@@ -139,6 +142,7 @@ class WalletForm extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   fetchCurrencySuccess: () => dispatch(fetchCurrency()),
+  fetchAllCurrencySucess: (value) => dispatch(fetchAllCurrency(value)),
   valueExpenseProps: (value) => dispatch(saveValueExpense(value)),
 });
 

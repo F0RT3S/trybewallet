@@ -1,39 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import WalletForm from '../components/WalletForm';
+import React, { Component } from 'react';
 
-class Wallet extends React.Component {
+export default class Wallet extends Component {
   render() {
-    const { userEmail } = this.props;
     return (
-      <header>
-        <div data-testid="email-field">
-          Olá,
-          {' '}
-          { userEmail }
-        </div>
-        <div data-testid="total-field">
-          Despesa total: 0
-        </div>
-
-        <div data-testid="header-currency-field">
-          BRL
-        </div>
-
-        <WalletForm />
-
-      </header>
+      <div>Wallet</div>
     );
   }
 }
-
-const mapStateToProps = (globalState) => ({
-  userEmail: globalState.user.email,
-});
-
-Wallet.propTypes = {
-  userEmail: PropTypes.string.isRequired,
-};
-
-export default connect(mapStateToProps, null)(Wallet);
