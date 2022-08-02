@@ -38,12 +38,12 @@ class Table extends Component {
                     <td>{ Number(data.exchangeRates[data.currency].ask).toFixed(2) }</td>
                     <td>
                       {
-                        (Number(data.value) * Number(data.exchangeRates[data.currency].ask))
+                        (Number(data.value)
+                        * Number(data.exchangeRates[data.currency].ask))
                           .toFixed(2)
                       }
                     </td>
                     <td>Real</td>
-
                   </tr>
                 ))
               }
