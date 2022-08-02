@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import WalletForm from './WalletForm';
 
 class Header extends React.Component {
   render() {
@@ -24,9 +23,6 @@ class Header extends React.Component {
         <div data-testid="header-currency-field">
           BRL
         </div>
-
-        <WalletForm />
-
       </header>
     );
   }
