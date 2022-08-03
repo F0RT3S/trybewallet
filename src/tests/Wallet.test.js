@@ -3,7 +3,6 @@ import { screen } from '@testing-library/react';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 import Wallet from "../pages/Wallet";
 import userEvent from "@testing-library/user-event";
-import user from "../redux/reducers/user";
 
 describe('Componente Wallet', () => {
   it('Verifica se existe um input de adicionar valor na tela', () => {
@@ -81,7 +80,7 @@ describe('Componente Wallet', () => {
     const button = screen.getByRole("button", {
       name: "Adicionar despesa"
     } );
-    
+
     userEvent.type(value, 10);
     userEvent.click(button);
 
