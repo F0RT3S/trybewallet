@@ -9,6 +9,11 @@ export const currenciesList = (coins) => ({
   payload: coins,
 });
 
+export const deleteItems = (itemId) => ({
+  type: 'DELETE_ITEM',
+  payload: itemId,
+});
+
 export const saveValueExpense = ({
   value, description, currency, method, tag, id,
 }, exchangeRates) => ({
